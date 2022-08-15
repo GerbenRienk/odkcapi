@@ -7,6 +7,7 @@ import json
 
 from utils.dictfile import readDictFile
 from utils.odkc_api import OdkCentralApi
+#from utils.reporter import Reporter
 import xml.etree.ElementTree as ET
 
 from _operator import itemgetter
@@ -25,11 +26,11 @@ if __name__ == '__main__':
 	submission_list = api.submissions.list_submissions(aut_token=aut_token, project_id=config['project_id'], form_id=config['form_id'], verbose=False)
 	print('checking duplicates:')
 	for submission in submission_list:
+		print(submission)
 		instance_data = api.submissions.submission_data(aut_token=aut_token, project_id=config['project_id'], form_id=config['form_id'], instance_id=submission['instanceId'], verbose=False)
 		#read the xml data
 		root = ET.fromstring(instance_data)
 		#find the PID
-		print(instance_data)
 		for info in root.findall('page-welcome'):
 			new_pid = info.find('PID').text          
 		
