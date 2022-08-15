@@ -143,18 +143,18 @@ class _Projects(object):
         self.api = odk_central_api
 
     def list_projects(self, aut_token, verbose=False):
-        project_url = self.api.url + "/v1/projects"
+        projects_url = self.api.url + "/v1/projects"
         bearer = "Bearer " + aut_token
         headers = {"Authorization": bearer}
         
-        response = self.api.utils.request(request_type='get', url=project_url, headers=headers, verbose=verbose)
+        response = self.api.utils.request(request_type='get', url=projects_url, headers=headers, verbose=verbose)
         if response.status_code == 200:
             # we got a json-response
             project_info = json.loads(response.text)
             
             return_value = project_info
         else:
-            print('projects request to %s returned status code %i' % (url, response.status_code))
+            print('projects request to %s returned status code %i' % (projects_url, response.status_code))
             return_value = None
         
         return return_value
@@ -166,11 +166,11 @@ class _Forms(object):
         self.api = odk_central_api
 
     def list_forms(self, aut_token, project_id, verbose=False):
-        project_url = self.api.url + "/v1/projects/" + project_id + "/forms"
+        forms_url = self.api.url + "/v1/projects/" + project_id + "/forms"
         bearer = "Bearer " + aut_token
         headers = {"Authorization": bearer}
         
-        response = self.api.utils.request(request_type='get', url=project_url, headers=headers, verbose=verbose)
+        response = self.api.utils.request(request_type='get', url=forms_url, headers=headers, verbose=verbose)
         if response.status_code == 200:
             # we got a json-response
             forms_info = json.loads(response.text)
@@ -189,22 +189,24 @@ class _Submissions(object):
         self.api = odk_central_api
 
     def list_submissions(self, aut_token, project_id, form_id, verbose=False):
-        project_url = self.api.url + "/v1/projects/" + project_id + "/forms/" + form_id + "/submissions"
+        submissions_url = self.api.url + "/v1/projects/" + project_id + "/forms/" + form_id + "/submissions"
         bearer = "Bearer " + aut_token
         headers = {"Authorization": bearer}
         
-        response = self.api.utils.request(request_type='get', url=project_url, headers=headers, verbose=verbose)
+        response = self.api.utils.request(request_type='get', url=submissions_url, headers=headers, verbose=verbose)
         if response.status_code == 200:
             # we got a json-response
             project_info = json.loads(response.text)
+            #project_info = response.text
             return_value = project_info
         else:
-            print('submissions request to %s returned status code %i' % (url, response.status_code))
+            print('submissions request to %s returned status code %i' % (submissions_url, response.status_code))
             return_value = None
         
         return return_value
         
         return None
+
 class _Participants(object):
 
     def __init__(self, odk_central_api):
