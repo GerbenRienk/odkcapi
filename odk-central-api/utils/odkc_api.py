@@ -196,9 +196,8 @@ class _Submissions(object):
         response = self.api.utils.request(request_type='get', url=submissions_url, headers=headers, verbose=verbose)
         if response.status_code == 200:
             # we got a json-response
-            project_info = json.loads(response.text)
-            #project_info = response.text
-            return_value = project_info
+            submission_info = json.loads(response.text)
+            return_value = submission_info
         else:
             print('submissions request to %s returned status code %i' % (submissions_url, response.status_code))
             return_value = None
@@ -207,6 +206,23 @@ class _Submissions(object):
         
         return None
 
+    def submission_data(self, aut_token, project_id, form_id, instance_id, verbose=False):
+        submission_data_url = self.api.url + "/v1/projects/" + project_id + "/forms/" + form_id + "/submissions/" + instance_id + ".xml"
+        bearer = "Bearer " + aut_token
+        headers = {"Authorization": bearer}
+        
+        response = self.api.utils.request(request_type='get', url=submission_data_url, headers=headers, verbose=verbose)
+        if response.status_code == 200:
+            # we got a json-response
+            data_info = response.text
+            return_value = data_info
+        else:
+            print('submissions data request to %s returned status code %i' % (submissions_url, response.status_code))
+            return_value = None
+        
+        return return_value
+        
+        return None
 class _Participants(object):
 
     def __init__(self, odk_central_api):
