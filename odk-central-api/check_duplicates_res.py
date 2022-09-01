@@ -7,12 +7,17 @@ import json
 
 from utils.dictfile import readDictFile
 from utils.odkc_api import OdkCentralApi
-from utils.reporter import Reporter
+
 from _operator import itemgetter
-import xml.etree.ElementTree as ET
         
+
+#from utils.reporter import Reporter
+#import xml.etree.ElementTree as ET
+       
 if __name__ == '__main__':
-	config=readDictFile('tb043.config')
+    
+    config=readDictFile('tb043.config')
+'''
 	# create a list of PID's
 	all_pids=[]
 
@@ -36,4 +41,5 @@ if __name__ == '__main__':
 			print('PID %s is more than once in the list of randomized PID\'s' %new_pid)
 		else:
 			all_pids.append(new_pid)
-	print('finished checking')
+'''	
+	
