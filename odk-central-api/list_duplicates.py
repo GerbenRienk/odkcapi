@@ -15,13 +15,14 @@ import xml.etree.ElementTree as ET
 if __name__ == '__main__':
 	# read the configuration
 	config=readDictFile('tb043.config')
+	
 	# setup a report
 	this_date = datetime.datetime.now()
 	date_stamp = this_date.strftime("%Y%m%d")
 	report_name = 'logs/list_duplicates_%s.log' % date_stamp 
 	my_report = Reporter(report_name)
-	start_time = datetime.datetime.now()
-	my_report.append_to_report('start checking for duplicates at %s' % str(start_time))
+	my_report.append_to_report('start checking for duplicates at %s' % str(datetime.datetime.now()))
+	
 	# set up the mailer
 	my_mailer = Mailer(config)
 	# create a list of PID's
@@ -39,9 +40,11 @@ if __name__ == '__main__':
 	my_report.append_to_report('Form: %s' % (config['form_id']))
     
 	submission_list = api.submissions.list_submissions(aut_token=aut_token, project_id=config['project_id'], form_id=config['form_id'], verbose=False)
+	total_entries = 0
 	total_duplicates = 0
 	for submission in submission_list:
-		print(submission)
+		#print(submission)
+		total_entries = total_entries + 1
 		instance_data = api.submissions.submission_data(aut_token=aut_token, project_id=config['project_id'], form_id=config['form_id'], instance_id=submission['instanceId'], verbose=False)
 		#read the xml data
 		root = ET.fromstring(instance_data)
@@ -55,7 +58,10 @@ if __name__ == '__main__':
 			my_report.append_to_report('PID %s is more than once in the list of randomized PID\'s' %new_pid)
 		else:
 			all_pids.append(new_pid)
+	my_report.append_to_report('Number of entries: %s' % total_entries)
 	my_report.append_to_report('Number of duplicates found: %s' % total_duplicates)
+	my_report.append_to_report('finish checking for duplicates at %s' % str(datetime.datetime.now()))
+    
     # send the report
 	my_mailer.send_file(report_name)
-	print('finished checking')
+	
